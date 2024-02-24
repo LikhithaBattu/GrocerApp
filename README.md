@@ -1,0 +1,4 @@
+•	Developed a responsive e-commerce platform for groceries to meet the rising demand for online grocery shopping, optimizing convenience and efficiency.
+•	Functionalities: Implemented essential functionalities, including a user-friendly homepage, product listings, detailed product pages, user registration, shopping cart, multi-step checkout process, payment processing, search and navigation, user reviews, and an admin panel for inventory management.
+•	Languages and Frameworks: Utilized HTML, CSS, and JavaScript for the front-end, C#, and ASP.NET MVC framework for server-side logic, MySQL for database management, and integrating Stripe/PayPal for secure payment processing.
+•	Tools and Libraries: Employed Bootstrap for responsive design, jQuery for enhanced interactivity, Ajax for asynchronous data exchange, and Git for version control.
