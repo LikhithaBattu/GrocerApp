@@ -1,0 +1,56 @@
+﻿@model GrocerApp.ViewModel.BaseViewModel
+
+@{
+    ViewBag.Title = "Edit User";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit User</h2>
+
+<script>
+    // Display alert for 30 seconds after the page loads
+    $(document).ready(function () {
+        setTimeout(function () {
+            $(".alert").alert('close');
+        }, 30000);
+    });
+</script>
+
+@if (ViewBag.Message != null)
+{
+    <div class="alert alert-success alert-dismissible fade show" role="alert">
+        @ViewBag.Message
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+@using (Html.BeginForm("EditUser", "Admin", FormMethod.Post))
+{
+    @Html.HiddenFor(model => model.Users.First().UserID) 
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Users.First().Username)
+        @Html.TextBoxFor(model => model.Users.First().Username, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Users.First().Email)
+        @Html.TextBoxFor(model => model.Users.First().Email, new { @class = "form-control" })
+    </div>
+
+  
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+}
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+<script>
+ 
+</script>

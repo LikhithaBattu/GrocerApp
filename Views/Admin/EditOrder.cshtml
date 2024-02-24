@@ -1,0 +1,54 @@
+﻿@model GrocerApp.ViewModel.BaseViewModel
+
+@{
+    ViewBag.Title = "Edit Order";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit Product</h2>
+
+@using (Html.BeginForm("EditOrder", "Admin", FormMethod.Post))
+{
+    @Html.HiddenFor(model => model.Orders.First().OrderNumber) 
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Orders.First().OrderNumber)
+        @Html.TextBoxFor(model => model.Orders.First().OrderNumber, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Orders.First().TotalCost)
+        @Html.TextBoxFor(model => model.Orders.First().TotalCost, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Orders.First().Address)
+        @Html.TextBoxFor(model => model.Orders.First().Address, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Orders.First().City)
+        @Html.TextBoxFor(model => model.Orders.First().City, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Orders.First().State)
+        @Html.TextBoxFor(model => model.Orders.First().State, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        @Html.LabelFor(model => model.Orders.First().ZipCode)
+        @Html.TextBoxFor(model => model.Orders.First().ZipCode, new { @class = "form-control" })
+    </div>
+   
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+}
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+
+<script>
+  
+</script>
+

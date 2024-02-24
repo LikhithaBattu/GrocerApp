@@ -1,0 +1,37 @@
+﻿@model string
+@{
+    ViewBag.Title = "OrderSuccess";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .order{
+            text-align:center;
+        }
+        #okButton {
+            background-color: #96b416;
+            color: #FFFFFF;
+            border-color: #96b416;
+            font-weight: 600;
+            padding: 10px;
+        }
+    </style>
+    <title>Order Confirmation</title>
+</head>
+<body>
+    <div class="order">
+        <h2>Order Confirmation</h2>
+        <p>Your order has been successfully placed.</p>
+        <p>Order Number: @ViewBag.OrderNumber</p>
+        <button id="okButton">OK</button>
+    </div>
+    <script>
+    document.getElementById("okButton").addEventListener("click", function () {
+        // Redirect to the home page
+        window.location.href = "@Url.Action("Index", "Home")";
+    });
+    </script>
+</body>
+</html>

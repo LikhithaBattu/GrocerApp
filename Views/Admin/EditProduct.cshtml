@@ -1,0 +1,39 @@
+﻿@model GrocerApp.ViewModel.BaseViewModel
+
+@{
+    ViewBag.Title = "Edit Product";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit Product</h2>
+
+@using (Html.BeginForm("EditProduct", "Admin", FormMethod.Post))
+{
+    @Html.HiddenFor(model => model.Products.First().ProductID) <!-- Include the user ID as a hidden field -->
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Products.First().Name)
+        @Html.TextBoxFor(model => model.Products.First().Name, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        @Html.LabelFor(model => model.Products.First().DetailDescription)
+        @Html.TextBoxFor(model => model.Products.First().DetailDescription, new { @class = "form-control" })
+    </div>
+
+
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+}
+
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+
+<script>
+
+</script>
+

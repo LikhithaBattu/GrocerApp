@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="998095dad74847a98fcece3394be0c99" Name="Diagram1" ZoomLevel="54">
+        <EntityTypeShape EntityType="GroceryDatabaseModel.Category" Width="1.5" PointX="3" PointY="2.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="GroceryDatabaseModel.Inventory" Width="1.5" PointX="7.5" PointY="1.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="GroceryDatabaseModel.OrderHistory" Width="1.5" PointX="0.75" PointY="6.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="GroceryDatabaseModel.OrderItem" Width="1.5" PointX="7.5" PointY="5.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="GroceryDatabaseModel.Order" Width="1.5" PointX="5.25" PointY="4.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="GroceryDatabaseModel.PaymentInformation" Width="1.5" PointX="5.25" PointY="8.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="GroceryDatabaseModel.Product" Width="1.5" PointX="5.25" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="GroceryDatabaseModel.Review" Width="1.5" PointX="8.25" PointY="8.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="GroceryDatabaseModel.User" Width="1.5" PointX="3" PointY="5.875" IsExpanded="true" />
+        <AssociationConnector Association="GroceryDatabaseModel.FK__Products__Catego__37A5467C" ManuallyRouted="false" />
+        <AssociationConnector Association="GroceryDatabaseModel.FK__Inventory__Produ__32E0915F" ManuallyRouted="false" />
+        <AssociationConnector Association="GroceryDatabaseModel.FK_Users_OrderHistory" ManuallyRouted="false" />
+        <AssociationConnector Association="GroceryDatabaseModel.FK__OrderItem__Order__33D4B598" ManuallyRouted="false" />
+        <AssociationConnector Association="GroceryDatabaseModel.FK__OrderItem__Produ__34C8D9D1" ManuallyRouted="false" />
+        <AssociationConnector Association="GroceryDatabaseModel.FK__Orders__UserID__35BCFE0A" ManuallyRouted="false" />
+        <AssociationConnector Association="GroceryDatabaseModel.FK__PaymentIn__UserI__36B12243" ManuallyRouted="false" />
+        <AssociationConnector Association="GroceryDatabaseModel.FK__Reviews__Product__38996AB5" ManuallyRouted="false" />
+        <AssociationConnector Association="GroceryDatabaseModel.FK__Reviews__UserID__398D8EEE" ManuallyRouted="false" />
+        <AssociationConnector Association="GroceryDatabaseModel.FK__PaymentIn__Order__47DBAE45" />
+        <EntityTypeShape EntityType="GroceryDatabaseModel.CustomerSupport" Width="1.5" PointX="10.375" PointY="0.75" />
+        <EntityTypeShape EntityType="GroceryDatabaseModel.Role" Width="1.5" PointX="0.75" PointY="10.875" />
+        <AssociationConnector Association="GroceryDatabaseModel.FK__Users__RoleCode__6FE99F9F" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

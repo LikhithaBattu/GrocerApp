@@ -1,0 +1,37 @@
+﻿@model GrocerApp.ViewModel.BaseViewModel
+
+@{
+    ViewBag.Title = "Order History";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Order History</h2>
+
+@if (Model != null && Model.Orders != null && Model.Orders.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Order Number</th>
+                <th>Order Date</th>
+                <th>Total Cost</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var order in Model.Orders)
+            {
+            <tr>
+                <td>
+                    @Html.ActionLink(order.OrderNumber.ToString(), "OrderDetails", "Account", new { orderNumber = order.OrderNumber }, null)
+                </td>
+                <td>@order.OrderDate.ToString("MM/dd/yyyy HH:mm:ss")</td>
+                <td>@order.TotalCost.ToString("C")</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No orders found.</p>
+}

@@ -1,0 +1,225 @@
+﻿@model GrocerApp.ViewModel.BaseViewModel
+@{
+    ViewBag.Title = "Admin Dashboard";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+}
+
+<h2>Admin Dashboard</h2>
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="successMessage" class="alert alert-success" role="alert">
+        @TempData["SuccessMessage"]
+        <button type="button" class="close" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+}
+
+
+<ul class="nav nav-tabs" id="adminTabs">
+    <li class="nav-item">
+        <a class="nav-link active" id="usersTab" data-toggle="tab" href="#usersContent">Users</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="productsTab" data-toggle="tab" href="#productsContent">Products</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="ordersTab" data-toggle="tab" href="#ordersContent">Orders</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" id="inventoryTab" data-toggle="tab" href="#inventoryContent">Inventory</a>
+    </li>
+   
+</ul>
+
+<div class="tab-content">
+    <div class="tab-pane fade show active" id="usersContent">
+      
+        <h4>Manage Users</h4>
+
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>User ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var user in Model.Users)
+                {
+                    <tr>
+                        <td>@user.UserID</td>
+                        <td>@user.Username</td>
+                        <td>@user.Email</td>
+                        <td>
+                            <a href="@Url.Action("EditUser", "Admin", new { userId = user.UserID })">Edit</a> |
+                            <a href="@Url.Action("DeleteUser", "Admin", new { userId = user.UserID })">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    <div class="tab-pane fade" id="productsContent">
+
+        <h4>Manage Products</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var product in Model.Products)
+                {
+                    <tr>
+                        <td>@product.ProductID</td>
+                        <td>@product.Name</td>
+                        <td>
+                            <a href="@Url.Action("EditProduct", "Admin", new { productId = product.ProductID })">Edit</a> |
+                            <a href="@Url.Action("DeleteProduct", "Admin", new { productId = product.ProductID })">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+    <div class="tab-pane fade" id="ordersContent">
+
+        <h4>Manage Orders</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Order Number</th>
+                    <th>User ID</th>
+                    <th>User Name</th>
+                    <th>Total Cost</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var order in Model.Orders)
+                {
+                <tr>
+                    <td>@order.OrderNumber</td>
+                    <td>@order.UserID</td>
+                    <td id="username_@order.OrderNumber"></td>
+                    <td>@order.TotalCost</td>
+                    <td>
+                        <a href="@Url.Action("EditOrder", "Admin", new { orderNumber = order.OrderNumber })">Edit</a> |
+                        <a href="@Url.Action("DeleteOrder", "Admin", new { orderNumber = order.OrderNumber })">Delete</a>
+                    </td>
+                </tr>
+                }
+            </tbody>
+        </table>
+
+    </div>
+    <div class="tab-pane fade" id="inventoryContent">
+     
+        <h4>Manage Inventory</h4>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Product ID</th>
+                    <th>Product Name</th>
+                    <th>Stock Level</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Inventory)
+                {
+                    <tr>
+                        <td>@item.ProductID</td>
+                        <td id="productName_@item.ProductID"></td>
+                        <td>@item.StockLevel</td>
+                        <td>
+                            <a href="@Url.Action("EditInventory", "Admin", new { productId = item.ProductID  })">Edit</a> |
+                            <a href="@Url.Action("DeleteInventory", "Admin", new { productId = item.ProductID  })">Delete</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+ 
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+
+
+<script>
+
+    $('#adminTabs a').click(function (e) {
+        e.preventDefault();
+        $(this).tab('show');
+    });
+
+
+    $('#adminTabs a[href="#usersContent"]').tab('show');
+
+
+    $('#adminTabs a').on('shown.bs.tab', function (e) {
+        var activeTab = e.target.hash;
+
+    });
+    // Close the success message after 30 seconds
+    setTimeout(function () {
+        $('#successMessage').fadeOut('slow');
+    }, 30000);
+
+    // Close the success message when the close button is clicked
+    $('#successMessage .close').on('click', function () {
+        $('#successMessage').fadeOut('slow');
+    });
+            // Client-side model to store data passed from the server
+
+            function getProductName(productId) {
+            // Find the product in the client-side model
+            var product = clientModel.Products.find(p => p.ProductID === productId);
+            return product ? product.Name : 'N/A';
+        }
+
+     var clientModel = {
+            Products: @Html.Raw(Json.Encode(Model.Products.Select(p => new { p.ProductID, p.Name }))),
+            // Add other necessary data here
+        };
+
+        // Update product names in the table
+        @foreach (var item in Model.Inventory)
+        {
+            <text>
+            var productName_@item.ProductID = getProductName(@item.ProductID);
+            $('#productName_@item.ProductID').text(productName_@item.ProductID);
+            </text>
+        }
+    var userModel = {
+        Users: @Html.Raw(Json.Encode(Model.Users.Select(u => new { u.UserID, u.Username }))),
+    };
+
+    function getUserName(userID) {
+        // Find all users with the given userID in the client-side model
+        var users = userModel.Users.filter(u => u.UserID === userID);
+        return users.map(u => u.Username).join(', ') || 'N/A';
+    }
+
+    // Update usernames in the table for each order
+    @foreach (var order in Model.Orders)
+    {
+        <text>
+        var username_@order.OrderNumber = getUserName(@order.UserID);
+        $('#username_@order.OrderNumber').text(username_@order.OrderNumber);
+        </text>
+    }
+
+</script>

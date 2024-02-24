@@ -1,0 +1,106 @@
+﻿@model GrocerApp.ViewModel.BaseViewModel
+
+@{
+    ViewBag.Title = "Account";
+}
+
+<h2>Account Details</h2>
+
+@if (Model != null && Model.User != null)
+{
+    <div>
+        <form id="accountDetailsForm">
+            <div>
+                <label>User Name:</label>
+                <input id="Username" name="Username" type="text" class="form-control" value="@Model.User.Username" readonly />
+            </div>
+            <div>
+                <label>Email:</label>
+                <input id="Email" name="Email" type="text" class="form-control" value="@Model.User.Email" readonly />
+            </div>
+
+            <div>
+                <label>Address:</label>
+                <input id="Address" name="Address" type="text" class="form-control" value="@Model.User.Address" />
+            </div>
+
+            <div>
+                <label>City:</label>
+                <input id="City" name="City" type="text" class="form-control" value="@Model.User.City" />
+            </div>
+
+            <div>
+                <label>State:</label>
+                <input id="State" name="State" type="text" class="form-control" value="@Model.User.State" />
+            </div>
+
+            <div>
+                <label>ZipCode:</label>
+                <input id="ZipCode" name="ZipCode" type="text" class="form-control" value="@Model.User.ZipCode" />
+            </div>
+            <br />
+            <button type="button" style="width:280px" class="btn btn-primary" onclick="saveChanges()">Save Changes</button>
+        </form>
+    </div>
+}
+
+<script>
+    function toggleEditMode() {
+        // Toggle the edit mode
+        var editableFields = document.querySelectorAll('.form-control:not([readonly])');
+        for (var i = 0; i < editableFields.length; i++) {
+            editableFields[i].readOnly = !editableFields[i].readOnly;
+        }
+    }
+
+    function saveChanges() {
+        // Get the current values of address, city, state, and zip
+        var currentAddress = document.getElementById('Address').value;
+        var currentCity = document.getElementById('City').value;
+        var currentState = document.getElementById('State').value;
+        var currentZipCode = document.getElementById('ZipCode').value;
+
+        $.ajax({
+            url: '/Account/UpdateUserDetails',
+            type: 'POST',
+            data: {
+                Address: currentAddress,
+                City: currentCity,
+                State: currentState,
+                ZipCode: currentZipCode
+            },
+            success: function (result) {
+                // Check if the details were updated successfully
+                if (result.success) {
+                    // Show success message
+                    showSuccessMessage('User details updated successfully.');
+                } else {
+                    // Handle the case where details were not updated
+                    alert('Failed to update user details. Please try again.');
+                }
+            },
+            error: function () {
+                // Handle AJAX error
+                alert('An error occurred during the update. Please try again.');
+            }
+        });
+    }
+
+    function showSuccessMessage(message) {
+        // Create a div for the success message
+        var successDiv = document.createElement('div');
+        successDiv.className = 'alert alert-success';
+        successDiv.innerHTML = '<strong>Success!</strong> ' + message;
+
+        // Append the success message below the "Account Details" header
+        var accountDetailsHeader = document.querySelector('h2');
+        accountDetailsHeader.parentNode.insertBefore(successDiv, accountDetailsHeader.nextSibling);
+
+        // Automatically remove the success message after 30 seconds
+        setTimeout(function () {
+            successDiv.parentNode.removeChild(successDiv);
+        }, 30000); // 30 seconds
+    }
+</script>
+
+

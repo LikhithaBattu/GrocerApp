@@ -1,0 +1,169 @@
+﻿@model GrocerApp.ViewModel.BaseViewModel
+
+
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Cart</title>
+        <style>
+            table {
+                width: 100%;
+                border-collapse: collapse;
+            }
+
+            table, th, td {
+                border: 1px solid black;
+            }
+
+            th, td {
+                padding: 8px;
+                text-align: center;
+            }
+
+            th {
+                background-color: #96b416;
+                color: #FFFFFF;
+            }
+            .btn-quantity-decrement, .btn-quantity-increment, .btn-remove-from-cart, .btn-checkout {
+                background-color: #96b416;
+                color: #FFFFFF;
+                border-color: #96b416;
+            }
+        </style>
+    </head>
+    <body>
+        <h1>Shopping Cart</h1>
+
+        @if (Model.CartItems.Count == 0)
+        {
+            <p>Your cart is empty.</p>
+        }
+        else
+        {
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model.CartItems)
+                    {
+                        <tr>
+                            <td>
+                                <a href="@Url.Action("ProductDetail", "Shop", new { productId = item.ProductId })">
+                                    <img src="@Url.Content(@item.ProductImageURL)" alt="@item.ProductName" width="50" height="50" />
+                                    @item.ProductName
+                                </a>
+                            </td>
+                            <td>$<span id="price_@item.ProductId">@item.Price</span></td>
+                            <td>
+                                <button class="btn-quantity-decrement" data-productid="@item.ProductId" onclick="decrementQuantity(@item.ProductId)">-</button>
+                                <input style="text-align:center" type="number" class="quantity" id="quantity_@item.ProductId" data-productid="@item.ProductId" value="@item.Quantity" />
+                                <button class="btn-quantity-increment" data-productid="@item.ProductId" onclick="incrementQuantity(@item.ProductId)">+</button>
+                                <button class="btn-remove-from-cart" data-productid="@item.ProductId" onclick="removeFromCart(@item.ProductId)">Remove</button>
+                            </td>
+                            <td>$<span id="total_@item.ProductId">@((item.Price * item.Quantity))</span></td>
+                        </tr>
+                    }
+                </tbody>
+
+            </table>
+            <div style="text-align: right;">
+                <h3>Total: $<span id="cart-total"></span></h3>
+                <button style="width:150px;height:50px;font-weight:700" class="btn-checkout" onclick="redirectToCheckout()">Checkout</button>
+            </div>
+        }
+
+        <p><a href="@Url.Action("Category", "Shop", new { categoryId = 1 })">Continue Shopping</a></p>
+        <script>
+ function redirectToCheckout() {
+        // Generate the URL for the Checkout action in the Cart controller
+        var checkoutUrl = '@Url.Action("Checkout", "Cart")';
+
+        // Redirect the user to the Checkout page
+        window.location.href = checkoutUrl;
+    }
+    function incrementQuantity(productId) {
+        var quantityInput = $("#quantity_" + productId);
+        var currentQuantity = parseInt(quantityInput.val());
+        quantityInput.val(currentQuantity + 1);
+        updateTotal(productId);
+        updateCartItemQuantityOnServer(productId, currentQuantity + 1);
+    }
+
+    function decrementQuantity(productId) {
+        var quantityInput = $("#quantity_" + productId);
+        var currentQuantity = parseInt(quantityInput.val());
+        if (currentQuantity > 1) {
+            quantityInput.val(currentQuantity - 1);
+            updateTotal(productId);
+            updateCartItemQuantityOnServer(productId, currentQuantity - 1);
+                    }
+    }
+
+    function updateTotal(productId) {
+    var quantity = parseInt($("#quantity_" + productId).val());
+    var price = parseFloat($("#price_" + productId).text());
+    var newTotal = (quantity * price).toFixed(2);
+        $("#total_" + productId).text(newTotal);
+        updateCartTotal();
+    }
+
+    function removeFromCart(productId) {
+    // Send an AJAX request to remove the product from the cart
+    $.ajax({
+        type: "POST",
+        url: "@Url.Action("RemoveFromCart", "Cart")",
+        data: { productId: productId },
+        success: function () {
+
+            location.reload();
+        },
+        error: function () {
+            // Handle errors if needed
+        }
+    });
+            }
+
+function updateCartItemQuantityOnServer(productId, newQuantity) {
+    $.ajax({
+        type: "POST",
+        url: "@Url.Action("UpdateCartItemQuantity", "Cart")",
+        data: { productId: productId, quantity: newQuantity },
+        success: function (data) {
+            // Update the cart count in your page and navigation menu
+            $("#cart-count").text(data.cartCount);
+            updateCartTotal();
+        },
+        error: function () {
+            // Handle errors if needed
+        }
+    });
+            }
+            function updateCartTotal() {
+                var total = 0;
+                // Loop through each item in the cart and calculate the total
+                $("[id^='total_']").each(function () {
+                    var productId = $(this).attr("id").split("_")[1];
+                    var quantity = parseInt($("#quantity_" + productId).val());
+                    var price = parseFloat($("#price_" + productId).text());
+
+                    var productTotal = quantity * price;
+                    total += productTotal;
+                });
+                // Update the cart total displayed on the page
+                $("#cart-total").text(total.toFixed(2));
+            }
+            window.onload = function () {
+                updateCartTotal();
+            };
+
+        </script>
+
+
+    </body>
+</html>

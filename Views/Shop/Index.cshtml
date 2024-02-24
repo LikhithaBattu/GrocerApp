@@ -1,0 +1,17 @@
+﻿
+@{
+    ViewBag.Title = "Shop";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Shop Categories</h2>
+<ul>
+    @foreach (var category in Model)
+    {
+        <li>
+            <a href="/Shop/Category/@category.Id">@category.Name</a>
+        </li>
+    }
+</ul>
+
+

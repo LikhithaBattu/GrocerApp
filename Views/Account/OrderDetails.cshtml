@@ -1,0 +1,35 @@
+﻿@model GrocerApp.ViewModel.BaseViewModel
+
+@{
+    ViewBag.Title = "Order Details";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Order Details</h2>
+
+@if (Model != null && Model.OrderItems != null && Model.OrderItems.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Cost</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var orderItem in Model.OrderItems)
+            {
+            <tr>
+                <td>@orderItem.Product.Name</td>
+                <td>@orderItem.Quantity</td>
+                <td>$@(orderItem.Quantity * orderItem.Product.Price)</td>
+            </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No order details found.</p>
+}

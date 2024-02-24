@@ -1,0 +1,105 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Grocefy Online</title>
+    <style>
+        h1, h2 {
+            color: #96b416;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: flex-start;
+            align-items: center; 
+            height: 100vh;
+            background-color: #fff;
+        }
+
+        .contact-form-container {
+            max-width: 100%;
+            width: 400px;
+            margin: auto;
+        }
+
+        .contact-form {
+            margin-top: 200px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            align-items: center; 
+        }
+
+            .contact-form h1 {
+                text-align: center;
+                margin-bottom: 20px;
+            }
+
+            .contact-form input[type="text"],
+            .contact-form input[type="email"],
+            .contact-form textarea {
+                width: 100%;
+                padding: 10px;
+                margin-bottom: 10px;
+                border: 1px solid #ccc;
+                border-radius: 3px;
+            }
+
+            .contact-form button {
+                width: 100%;
+                max-width: 280px;
+                background-color: #96b416;
+                color: #fff;
+                border: none;
+                padding: 10px 20px;
+                border-radius: 3px;
+                cursor: pointer;
+            }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+    <div class="contact-form-container">
+        <div class="contact-form">
+            <h1>Contact Us</h1>
+            <form id="contactForm">
+                <input type="text" name="name" id="name" placeholder="Name" required>
+                <input type="email" name="email" id="email" placeholder="Email" required>
+                <textarea name="message" id="message" rows="4" placeholder="Message" required></textarea>
+                <button type="button" onclick="sendMessage()">Send Message</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function sendMessage() {
+            var name = $('#name').val();
+            var email = $('#email').val();
+            var message = $('#message').val();
+
+            $.ajax({
+                url: '/Account/SaveCustomerSupport', // Update the URL to your controller action
+                type: 'POST',
+                data: {
+                    name: name,
+                    email: email,
+                    message: message
+                },
+                success: function (result) {
+                    window.location.href = '/Account/ThankYou';
+                },
+                error: function () {
+                    alert('Failed to send message. Please try again.');
+                }
+            });
+        }
+    </script>
+</body>
+</html>

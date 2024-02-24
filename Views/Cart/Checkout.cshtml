@@ -1,0 +1,224 @@
+﻿@model GrocerApp.ViewModel.BaseViewModel
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Checkout</title>
+    <style>
+        /* Global styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+
+        /* Checkout container */
+        .checkout-container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Shipping information section */
+        .shipping-section {
+            flex: 1;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+        }
+
+        /* Order summary section */
+        .order-summary-section {
+            flex: 1;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            position: sticky;
+            top: 0;
+        }
+
+        /* Input fields */
+        label {
+            display: block;
+            margin: 10px 0;
+            font-weight: 600;
+        }
+
+        .order-summary-section {
+            float: right;
+            width: 50%;
+            position: fixed;
+            top: 20px;
+            right: 0;
+            height: 100%;
+            overflow: auto;
+        }
+
+
+        /* Order summary table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: center;
+        }
+
+        th {
+            background-color: #96b416;
+            color: #FFFFFF;
+        }
+
+        /* Total */
+        .total {
+            font-weight: 600;
+            margin: 10px 0;
+        }
+        #stripePaymentButton {
+            background-color: #96b416;
+            color: #FFFFFF;
+            border-color: #96b416;
+            font-weight:600;
+            padding:10px;
+        }
+
+
+    </style>
+</head>
+<body>
+    <br />
+    <div class="checkout-container">       
+        <div class="shipping-section">
+            <h1>Shipping Information</h1>
+            <form id="checkout-form" method="post" action="@Url.Action("ProcessCheckout", "Cart")">             
+                <div  class="form-group">
+                    <label for="name">Name:</label>
+                    <input class="form-control" type="text" id="name" name="Name" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="address">Address:</label>
+                    <input  class="form-control" type="text" id="address" name="Address" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="city">City:</label>
+                    <input class="form-control" type="text" id="city" name="City" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="state">State:</label>
+                    <input class="form-control" type="text" id="state" name="State" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="zipcode">ZIP Code:</label>
+                    <input class="form-control" type="text" id="zipcode" name="Zipcode" required>
+                </div>
+
+                    <h2>Payment Method</h2>
+                    <div class="form-group">
+                        <label for="paymentMethod">Select Payment Method:</label>
+                        <select class="form-control" id="paymentMethod" name="paymentMethod" required onchange="handlePaymentMethodChange(this);">
+                            <option value="">Select</option>
+                            <option value="cashOnDelivery">Cash on Delivery</option>
+                            <option value="creditCard">Credit/Debit Card</option>
+                            <option value="Stripe">Stripe</option>
+                        </select>
+                    </div>
+                    <div id="creditCardFields" style="display:none">
+                        <div class="form-group">
+                            <label for="cardName">Cardholder Name</label>
+                            <input class="form-control" type="text" id="cardName" name="cardName">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cardNumber">Card Number</label>
+                            <input class="form-control" type="text" id="cardNumber" name="cardNumber">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="cardExpiryMonth">Expiration Date</label>
+                            <input class="form-control" type="text" id="cardExpiryDate" name="cardExpiryDate" placeholder="MM/YY">
+                        </div>
+
+                       
+                        <div class="form-group"">
+                            <label for="cardCVC">CVC</label>
+                            <input class="form-control" type="text" id="cardCVC" name="cardCVC">
+                        </div>
+                    </div>
+                    <div class="order-summary-section">
+                        <h2>Order Summary</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Product</th>
+                                    <th>Quantity</th>
+                                    <th>Price</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in Model.CartItems)
+                                {
+                                    <tr>
+                                        <td>
+                                            <a href="@Url.Action("ProductDetail", "Shop", new { productId = item.ProductId })">
+                                                <img src="@Url.Content(@item.ProductImageURL)" alt="@item.ProductName" width="50" height="50" />
+                                                @item.ProductName
+                                            </a>
+                                        </td>
+
+                                        <td>@item.Quantity</td>
+                                        <td>$@item.Price</td>
+                                        <td>$@(item.Quantity * item.Price)</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+
+                        <div class="total" style="text-align:right">
+                            <h3>Total: $@Model.CartItems.Sum(item => item.Quantity * item.Price)</h3>
+                        </div>
+                        <input type="hidden" id="OrderTotal" name="OrderTotal" value="@Model.CartItems.Sum(item => item.Quantity * item.Price)">
+
+                        <div style="text-align:right">
+                            <button type="submit" id="stripePaymentButton">Place Order</button>
+                        </div>
+                    </div>
+                </form>
+</div>
+    </div>
+    <script>
+
+        function handlePaymentMethodChange(selectElement) {
+    var selectedPaymentMethod = selectElement.value;
+    var creditCardFields = document.getElementById("creditCardFields");
+
+    if (selectedPaymentMethod === "Stripe") {
+        // Make an AJAX request to retrieve the Stripe payment link
+        var stripePaymentLink = "https://buy.stripe.com/test_28odTt7AggPnev69AA";
+
+    // Redirect the user to the Stripe hosted payment page
+    window.location.href = stripePaymentLink;
+    } else if (selectedPaymentMethod === "creditCard") {
+        creditCardFields.style.display = "block";
+    }
+    else {
+        creditCardFields.style.display = "none";
+    }
+}
+
+    </script>
+</body>
+</html>
